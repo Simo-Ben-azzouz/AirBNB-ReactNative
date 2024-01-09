@@ -1,9 +1,9 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
+import { useRoute } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { SplashScreen, Stack } from 'expo-router';
+import { SplashScreen, Stack, useRouter } from 'expo-router';
 import { useEffect } from 'react';
-import { useColorScheme } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -44,10 +44,50 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
+  const router = useRouter();
 
   return (
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+        name="(modals)/login"
+        options={{
+          title : 'Log in Or Sign Up',
+          headerTitleStyle :{
+            fontFamily : 'mon-sb'
+          },
+          presentation : 'modal',
+          // b9ina hna 3ndna mochkil fl .black makhdamach 
+          headerLeft : () => (
+            <TouchableOpacity onPress={() => router.back()}>
+              <Ionicons 
+                name="close-outline"
+                 size={28}>
+              </Ionicons>
+            </TouchableOpacity>
+          ),
+        }}
+        />
+        
+        {/*  */}
+         <Stack.Screen
+           name="listing/[id]" options={{headerTitle : ''}} />
+           <Stack.Screen name="(models)/booking"
+                        options={{
+                          presentation : 'transparentModal',
+                          animation : 'fade',
+                           headerLeft : () => (
+            <TouchableOpacity onPress={() => router.back()}>
+              <Ionicons 
+                name="close-outline"
+                 size={28}>
+              </Ionicons>
+            </TouchableOpacity>
+          ),
+                        }}
+                        />
+
+
       </Stack>
   );
 }

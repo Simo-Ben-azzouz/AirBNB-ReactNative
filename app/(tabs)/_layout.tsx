@@ -2,7 +2,6 @@ import React from 'react'
 import { Tabs } from 'expo-router'
 import Colors from '@/constants/Colors';
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
-import { EvilIcons } from '@expo/vector-icons'; 
 import {Ionicons} from '@expo/vector-icons';
 const Layout = () => {
   return (
@@ -20,6 +19,17 @@ const Layout = () => {
         <Ionicons name="search" color={color} size={size} />       
     }} 
        />
+
+        {/* Wishlists */}
+
+        <Tabs.Screen 
+        name="wishlists" 
+        options={{
+        tabBarLabel: 'Wishlists', 
+        tabBarIcon : ({color , size}) =>
+        <Ionicons name="heart-outline" color={color} size={size} />       
+            }} 
+            />
 
        {/* Trips */}
 
@@ -53,6 +63,8 @@ const Layout = () => {
         <Ionicons name="person-circle-outline" color={color} size={size} />       
     }} 
        />
+       
+       
     </Tabs>
   );
 };
