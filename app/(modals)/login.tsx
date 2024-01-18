@@ -5,9 +5,47 @@ import { TextInput } from 'react-native-gesture-handler';
 import { defaultStyles } from '@/constants/Styles';
 import Colors from '@/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { useAuth, useOAuth } from '@clerk/clerk-expo';
+
+enum Strategy {
+  Google = 'oauth_google',
+  Apple = 'oauth_apple',
+  Facebook = 'oauth_facebook',
+}
+
 
 const Page = () => {
   useWarmUpBrowser();
+const router = useRouter();
+
+const { startOAuthFlow : googleAuth } = useOAuth({strategy : 'oauth_google'});
+const { startOAuthFlow : appleAuth } = useOAuth({strategy : 'oauth_apple'});
+const { startOAuthFlow : facebookAuth } = useOAuth({strategy : 'oauth_facebook'});
+
+const onSelectedAuth = async ( strategy : Strategy) =>{
+  const selectedAuth = {
+    [Strategy.Google] : googleAuth,
+    [Strategy.Apple] : appleAuth,
+    [Strategy.Facebook] : facebookAuth,
+
+  }[strategy];
+
+  try{
+    const { createdSessionId , setActive} = await selectedAuth();
+    console.log("bla bla ", createdSessionId);
+    
+    if (createdSessionId) {
+      setActive !({session : createdSessionId});
+      router.back();
+    }
+   
+  } 
+  catch (err){
+      console.error('OAuth error :' ,err);
+      
+    }
+};
 
   return (
     <View>
@@ -43,14 +81,14 @@ const Page = () => {
               </Text>
            </TouchableOpacity>
 
-           <TouchableOpacity style ={styles.btnOutline}>
+           <TouchableOpacity style ={styles.btnOutline} onPress={()=> onSelectedAuth(Strategy.Google)}>
               <Ionicons name="md-logo-google" size={24} style ={defaultStyles.btnIcon} />
               <Text style ={styles.btnOutlineText}>
                 Continue with Google
               </Text>
            </TouchableOpacity>
 
-           <TouchableOpacity style ={styles.btnOutline}>
+           <TouchableOpacity style ={styles.btnOutline} onPress={()=> onSelectedAuth(Strategy.Facebook)}>
               <Ionicons name="md-logo-facebook" size={24} style ={defaultStyles.btnIcon} />
               <Text style ={styles.btnOutlineText}>
                 Continue with Facebook
@@ -58,7 +96,7 @@ const Page = () => {
            </TouchableOpacity>
 
 
-           <TouchableOpacity style ={styles.btnOutline}>
+           <TouchableOpacity style ={styles.btnOutline} onPress={()=> onSelectedAuth(Strategy.Apple)}>
               <Ionicons name="md-logo-apple" size={24} style ={defaultStyles.btnIcon} />
               <Text style ={styles.btnOutlineText}>
                 Apple
