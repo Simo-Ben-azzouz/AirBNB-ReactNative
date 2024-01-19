@@ -48,7 +48,7 @@ const onSelectedAuth = async ( strategy : Strategy) =>{
 };
 
   return (
-    <View>
+    <View style={{marginTop: 60}}>
         <TextInput autoCapitalize='none' placeholder='Email' style={[defaultStyles.inputField, {marginBottom : 30}]}
         />
         <TouchableOpacity style={defaultStyles.btn}>
@@ -118,12 +118,14 @@ const styles = StyleSheet.create({
     gap : 10,
     alignItems : 'center',
     marginVertical : 30,
+    marginHorizontal: 40,
   },
   seperator:{
     fontFamily: 'mon-sb',
     color : Colors.grey,
   },
   btnOutline : {
+    marginHorizontal: 40,
     backgroundColor :'#fff',
     borderWidth : 1,
     borderColor : Colors.grey,
