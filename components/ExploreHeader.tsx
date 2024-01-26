@@ -1,11 +1,11 @@
 import { View, Text, Touchable } from 'react-native'
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StyleSheet } from 'react-native';
 import { Link } from 'expo-router';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import Colors from '@/constants/Colors';
 
 const categories = [
@@ -41,6 +41,13 @@ const categories = [
 
 
 const ExploreHeader = () => {
+
+    const itemRef = useRef<Array<TouchableOpacity | null>> ([]);
+    const [activeIndex , setActiveIndex] = useState(0);
+    
+    const selectCategory = (index : number) => {
+      setActiveIndex (index);
+    }
   return (
       <SafeAreaView style={{flex : 1,backgroundColor : '#fff'}}>
     <View style = {styles.container}>
@@ -60,6 +67,31 @@ const ExploreHeader = () => {
           <Ionicons name='options-outline' size={24} />
         </TouchableOpacity>
       </View>
+
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{
+          alignItems : 'center',
+          gap : 20,
+          paddingHorizontal : 16
+        }}
+      >
+        {categories.map((Item , index) => (
+          <TouchableOpacity 
+          onPress={() => selectCategory(index)}
+          key={index}
+          ref={(el) => (itemRef.current[index] = el)}
+          style ={activeIndex === index ? styles.categoriesBtnActive : 
+          styles.categoriesBtn}
+          >
+            <MaterialIcons size={24}  name={Item.icon as any}
+            color={activeIndex === index ? '#000' : 
+              Colors.grey}/>
+            <Text>{Item.name}</Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
     </View>
       </SafeAreaView>
   );
@@ -68,7 +100,7 @@ const ExploreHeader = () => {
 const styles = StyleSheet.create({
   container : {
     backgroundColor : '#fff',
-    height : 130,
+    height : 180,
   },
   actionRow  : {
     flexDirection : 'row',
@@ -104,7 +136,32 @@ const styles = StyleSheet.create({
       width: 1,
       height: 1,
   }
-}});
+    },
+    categoryText :{
+      fontSize : 14,
+      fontFamily : 'mon-sb',
+      color : Colors.grey
+    },
+    categoryTextActive : {
+      fontSize : 14,
+      fontFamily : 'mon-sb',
+      color : '#000'
+    },
+    categoriesBtn : {
+      flex : 1 ,
+      alignItems : 'center',
+      justifyContent : 'center',
+      paddingBottom : 8
+    },
+    categoriesBtnActive : {
+      flex : 1,
+      alignItems : 'center',
+      justifyContent : 'center',
+      paddingBottom : 8,
+      borderBottomColor : '#000',
+      borderBottomWidth : 2
+    }
+});
 
 
 export default ExploreHeader
