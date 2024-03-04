@@ -37,7 +37,12 @@ const categories = [
   },
 ];
 
-const ExploreHeader = () => {
+interface Props {
+    oncategoryChanged : (category : string) => void 
+}
+
+
+const ExploreHeader = ({ oncategoryChanged } : Props) => {
   const scrollRef = useRef<ScrollView>(null);
   const itemRef = useRef<Array<TouchableOpacity | null>>([]);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -51,6 +56,8 @@ const ExploreHeader = () => {
     });
 
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
+    oncategoryChanged (categories[index].name);
   };
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
